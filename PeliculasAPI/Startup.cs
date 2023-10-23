@@ -1,4 +1,6 @@
-﻿namespace PeliculasAPI
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace PeliculasAPI
 {
 	public class Startup
 	{
@@ -11,8 +13,10 @@
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// Configuración de conexión con la base de datos
+			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnectionStrings")));
+
 			services.AddControllers();
-			services.AddEndpointsApiExplorer();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
