@@ -13,6 +13,9 @@ namespace PeliculasAPI
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// Configuración de AutoMapper
+			services.AddAutoMapper(typeof(Startup));
+
 			// Configuración de conexión con la base de datos
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
 
