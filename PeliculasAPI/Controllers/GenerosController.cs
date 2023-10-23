@@ -61,5 +61,18 @@ namespace PeliculasAPI.Controllers
 
 			return NoContent();
 		}
+
+		[HttpDelete("id")]
+		public async Task<ActionResult> Detele(int id)
+		{
+			var existe = await context.Generos.AnyAsync(x => x.Id == id);
+			if (!existe)
+				return NotFound();
+
+			context.Remove(new Genero() { Id = id });
+			await context.SaveChangesAsync();
+
+			return NoContent();
+		}
 	}
 }
