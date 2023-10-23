@@ -9,6 +9,7 @@ namespace PeliculasAPI.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<Genero, GeneroDTO>().ReverseMap();
-        }
+            CreateMap<GeneroCreacionDTO, Genero>();
+		}
     }
 }
