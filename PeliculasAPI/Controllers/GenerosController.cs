@@ -27,7 +27,7 @@ namespace PeliculasAPI.Controllers
 			return dtos;
 		}
 
-		[HttpGet("{id:int}")]
+		[HttpGet("{id:int}", Name = "obtenerGenero")]
 		public async Task<ActionResult<GeneroDTO>> Get(int id)
 		{
 			var entidad = await context.Generos.FirstOrDefaultAsync(x => x.Id == id);
@@ -37,6 +37,18 @@ namespace PeliculasAPI.Controllers
 			var dto = mapper.Map<GeneroDTO>(entidad);
 
 			return dto;
+		}
+
+		[HttpPost]
+		public async Task<ActionResult> Post([FromBody] GeneroCreacionDTO generoCreacionDTO)
+		{
+			var entidad = mapper.Map<Genero>(generoCreacionDTO);
+			context.Add(entidad);
+			await context.SaveChangesAsync();
+
+			var generoDTO = mapper.Map<GeneroDTO>(entidad);
+
+			return new CreatedAtRouteResult("obtenerGenero", new { id = generoDTO.Id }, generoDTO);
 		}
 	}
 }
