@@ -14,7 +14,7 @@ namespace PeliculasAPI
 		public void ConfigureServices(IServiceCollection services)
 		{
 			// Configuración de conexión con la base de datos
-			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnectionStrings")));
+			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
 
 			services.AddControllers();
 		}
