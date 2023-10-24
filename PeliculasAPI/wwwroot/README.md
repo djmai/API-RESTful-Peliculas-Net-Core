@@ -1,0 +1,1 @@
+### Carpeta para archivos estaticos :file_folder:
