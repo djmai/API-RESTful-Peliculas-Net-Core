@@ -27,7 +27,8 @@ namespace PeliculasAPI
 			// Configuración de conexión con la base de datos
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
 
-			services.AddControllers();
+			services.AddControllers()
+				.AddNewtonsoftJson();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
