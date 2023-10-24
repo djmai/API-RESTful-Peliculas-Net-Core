@@ -39,6 +39,8 @@ namespace PeliculasAPI
 
 			app.UseHttpsRedirection();
 
+			app.UseStaticFiles(); // Sirviendo contenido estatico
+
 			app.UseRouting();
 
 			app.UseAuthorization();
