@@ -2,11 +2,11 @@
 
 namespace PeliculasAPI.Validaciones
 {
-	public class PeroImagenValidacion : ValidationAttribute
+	public class PesoArchivoValidacion : ValidationAttribute
 	{
 		private readonly int pesoMaximoEnMegaBytes;
 
-		public PeroImagenValidacion(int PesoMaximoEnMegaBytes)
+		public PesoArchivoValidacion(int PesoMaximoEnMegaBytes)
 		{
 			pesoMaximoEnMegaBytes = PesoMaximoEnMegaBytes;
 		}
