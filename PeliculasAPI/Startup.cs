@@ -18,7 +18,11 @@ namespace PeliculasAPI
 			services.AddAutoMapper(typeof(Startup));
 
 			// Agregando servicio para almacenar archivos en Azure Storage
-			services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+			// services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+
+			// Agregando servicio para almacenar archivos en local
+			services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+			services.AddHttpContextAccessor();
 
 			// Configuración de conexión con la base de datos
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
