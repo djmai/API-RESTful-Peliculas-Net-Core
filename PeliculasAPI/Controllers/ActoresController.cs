@@ -72,7 +72,7 @@ namespace PeliculasAPI.Controllers
 			return new CreatedAtRouteResult("obtenerActor", new { id = entidad.Id }, dto);
 		}
 
-		[HttpPut]
+		[HttpPut("{id}")]
 		public async Task<ActionResult> Put(int id, [FromForm] ActorCreacionDTO actorCreacionDTO)
 		{
 			// Actualiza todos los datos cuando el usuario envia todo lo de ActorCreacionDTO
@@ -133,7 +133,7 @@ namespace PeliculasAPI.Controllers
 			return NoContent();
 		}
 
-		[HttpDelete("id")]
+		[HttpDelete("{id}")]
 		public async Task<ActionResult> Detele(int id)
 		{
 			var existe = await context.Actores.AnyAsync(x => x.Id == id);
