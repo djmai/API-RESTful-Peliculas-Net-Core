@@ -51,7 +51,7 @@ namespace PeliculasAPI.Controllers
 			return new CreatedAtRouteResult("obtenerGenero", new { id = generoDTO.Id }, generoDTO);
 		}
 
-		[HttpPut("{id:int}")]
+		[HttpPut("{id}")]
 		public async Task<ActionResult> Put(int id, [FromBody] GeneroCreacionDTO generoCreacionDTO)
 		{
 			var entidad = mapper.Map<Genero>(generoCreacionDTO);
@@ -62,7 +62,7 @@ namespace PeliculasAPI.Controllers
 			return NoContent();
 		}
 
-		[HttpDelete("id")]
+		[HttpDelete("{id}")]
 		public async Task<ActionResult> Detele(int id)
 		{
 			var existe = await context.Generos.AnyAsync(x => x.Id == id);
