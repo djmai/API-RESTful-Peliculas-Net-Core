@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +28,31 @@ namespace PeliculasAPI.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<List<PeliculaDTO>>> Get()
+		public async Task<ActionResult<PeliculasIndexDTO>> Get()
 		{
-			var peliculas = await context.Peliculas.ToListAsync();
-			return mapper.Map<List<PeliculaDTO>>(peliculas);
+			var top = 5;
+			var hoy = DateTime.Today;
+
+			var proximosEstrenos = await context.Peliculas
+				.Where(x => x.FechaEstreno > hoy)
+				.OrderBy(x => x.FechaEstreno)
+				.Take(top)
+				.ToListAsync();
+
+			var enCines = await context.Peliculas
+				.Where(x => x.EnCines)
+				.Take(top)
+				.ToListAsync();
+
+			var resultado = new PeliculasIndexDTO();
+
+			resultado.FuturosEstrenos = mapper.Map<List<PeliculaDTO>>(proximosEstrenos);
+			resultado.EnCines = mapper.Map<List<PeliculaDTO>>(enCines);
+
+			return resultado;
+
+			//var peliculas = await context.Peliculas.ToListAsync();
+			//return mapper.Map<List<PeliculaDTO>>(peliculas);
 		}
 
 		[HttpGet("{id:int}", Name = "obtenerPelicula")]
