@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Azure;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PeliculasAPI.DTOs;
 using PeliculasAPI.Entidades;
 using PeliculasAPI.Helpers;
+using System.Xml.XPath;
 
 namespace PeliculasAPI.Controllers
 {
@@ -25,7 +28,7 @@ namespace PeliculasAPI.Controllers
 			return dtos;
 		}
 
-		protected async Task<List<TDTO>> Get<TEntidad, TDTO>(PaginacionDTO paginacionDTO) where TEntidad: class
+		protected async Task<List<TDTO>> Get<TEntidad, TDTO>(PaginacionDTO paginacionDTO) where TEntidad : class
 		{
 			// cantidad total de registros por página
 			var queryable = context.Set<TEntidad>().AsQueryable();
@@ -46,7 +49,7 @@ namespace PeliculasAPI.Controllers
 			return mapper.Map<TDTO>(entidad);
 		}
 
-		protected async Task<ActionResult> Post<TCreacion, TEntidad, TLectura>(TCreacion creacionDTO, string nombreRuta) where TEntidad: class, IId
+		protected async Task<ActionResult> Post<TCreacion, TEntidad, TLectura>(TCreacion creacionDTO, string nombreRuta) where TEntidad : class, IId
 		{
 			var entidad = mapper.Map<TEntidad>(creacionDTO);
 			context.Add(entidad);
@@ -66,7 +69,32 @@ namespace PeliculasAPI.Controllers
 			return NoContent();
 		}
 
-		protected async Task<ActionResult> Delete<TEntidad>(int id) where TEntidad : class, IId, new ()
+		protected async Task<ActionResult> Patch<TEntidad, TDTO>(int id, JsonPatchDocument<TDTO> patchDocument) where TDTO : class where TEntidad : class, IId
+		{
+			if (patchDocument == null)
+				return BadRequest();
+
+			var entidadDB = await context.Set<TEntidad>().FirstOrDefaultAsync(x => x.Id == id);
+
+			if (entidadDB == null)
+				return NotFound();
+
+			var entidadDTO = mapper.Map<TDTO>(entidadDB);
+
+			patchDocument.ApplyTo(entidadDTO, ModelState);
+
+			var esValido = TryValidateModel(entidadDTO);
+
+			if (!esValido)
+				return BadRequest(ModelState);
+
+			mapper.Map(entidadDTO, entidadDB);
+			await context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		protected async Task<ActionResult> Delete<TEntidad>(int id) where TEntidad : class, IId, new()
 		{
 			var existe = await context.Set<TEntidad>().AnyAsync(x => x.Id == id);
 			if (!existe)
