@@ -46,5 +46,14 @@ namespace PeliculasAPI.Controllers
 
 			return new CreatedAtRouteResult(nombreRuta, new { id = entidad.Id }, dtoLectura);
 		}
+
+		protected async Task<ActionResult> Put<TCreacion, TEntidad>(int id, TCreacion creacionDTO) where TEntidad : class, IId
+		{
+			var entidad = mapper.Map<TEntidad>(creacionDTO);
+			entidad.Id = id;
+			context.Entry(entidad).State = EntityState.Modified;
+			await context.SaveChangesAsync();
+			return NoContent();
+		}
 	}
 }
