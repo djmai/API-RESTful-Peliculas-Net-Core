@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PeliculasAPI.DTOs;
 using PeliculasAPI.Entidades;
 
 namespace PeliculasAPI.Controllers
@@ -33,6 +34,17 @@ namespace PeliculasAPI.Controllers
 			}
 
 			return mapper.Map<TDTO>(entidad);
+		}
+
+		protected async Task<ActionResult> Post<TCreacion, TEntidad, TLectura>(TCreacion creacionDTO, string nombreRuta) where TEntidad: class, IId
+		{
+			var entidad = mapper.Map<TEntidad>(creacionDTO);
+			context.Add(entidad);
+			await context.SaveChangesAsync();
+
+			var dtoLectura = mapper.Map<TLectura>(entidad);
+
+			return new CreatedAtRouteResult(nombreRuta, new { id = entidad.Id }, dtoLectura);
 		}
 	}
 }
