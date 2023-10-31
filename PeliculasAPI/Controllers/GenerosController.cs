@@ -10,13 +10,8 @@ namespace PeliculasAPI.Controllers
 	[Route("api/generos")]
 	public class GenerosController : CustomBaseController
 	{
-		private readonly ApplicationDbContext context;
-		private readonly IMapper mapper;
-
 		public GenerosController(ApplicationDbContext context, IMapper mapper) : base(context, mapper)
 		{
-			this.context = context;
-			this.mapper = mapper;
 		}
 
 		[HttpGet]
