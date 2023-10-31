@@ -29,28 +29,11 @@ namespace PeliculasAPI.Controllers
 		public async Task<ActionResult<GeneroDTO>> Get(int id)
 		{
 			return await Get<Genero, GeneroDTO>(id);
-			/*var entidad = await context.Generos.FirstOrDefaultAsync(x => x.Id == id);
-			if (entidad == null)
-				return NotFound();
-
-			var dto = mapper.Map<GeneroDTO>(entidad);
-
-			return dto;*/
 		}
 
 		[HttpPost]
 		public async Task<ActionResult> Post([FromBody] GeneroCreacionDTO generoCreacionDTO)
 		{
-			/* var entidad = mapper.Map<Genero>(generoCreacionDTO);
-			context.Add(entidad);
-			await context.SaveChangesAsync();
-
-			var generoDTO = mapper.Map<GeneroDTO>(entidad);
-
-			return new CreatedAtRouteResult("obtenerGenero", new { id = generoDTO.Id }, generoDTO);
-
-			*/
-
 			return await Post<GeneroCreacionDTO, Genero, GeneroDTO>(generoCreacionDTO, "obtenerGenero");
 		}
 
