@@ -15,7 +15,7 @@ namespace PeliculasAPI.Controllers
 {
 	[ApiController]
 	[Route("api/peliculas")]
-	public class PeliculasController : ControllerBase
+	public class PeliculasController : CustomBaseController
 	{
 		private readonly ApplicationDbContext context;
 		private readonly IMapper mapper;
@@ -23,7 +23,7 @@ namespace PeliculasAPI.Controllers
 		private readonly ILogger<PeliculasController> logger;
 		private readonly string contenedor = "peliculas";
 
-		public PeliculasController(ApplicationDbContext context, IMapper mapper, IAlmacenadorArchivos almacenadorArchivos, ILogger<PeliculasController> logger)
+		public PeliculasController(ApplicationDbContext context, IMapper mapper, IAlmacenadorArchivos almacenadorArchivos, ILogger<PeliculasController> logger) : base(context, mapper)
 		{
 			this.context = context;
 			this.mapper = mapper;
@@ -190,32 +190,7 @@ namespace PeliculasAPI.Controllers
 		[HttpPatch("{id}")]
 		public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<PeliculaPatchDTO> patchDocument)
 		{
-			if (patchDocument == null)
-			{
-				return BadRequest();
-			}
-
-			var entidadDB = await context.Peliculas.FirstOrDefaultAsync(x => x.Id == id);
-
-			if (entidadDB == null)
-			{
-				return NotFound();
-			}
-
-			var entidadDTO = mapper.Map<PeliculaPatchDTO>(entidadDB);
-
-			patchDocument.ApplyTo(entidadDTO, ModelState);
-
-			var esValido = TryValidateModel(entidadDTO);
-			if (!esValido)
-			{
-				return BadRequest(ModelState);
-			}
-
-			mapper.Map(entidadDTO, entidadDB);
-			await context.SaveChangesAsync();
-
-			return NoContent();
+			return await Patch<Pelicula, PeliculaPatchDTO>(id, patchDocument);
 		}
 
 		[HttpDelete("{id}")]
