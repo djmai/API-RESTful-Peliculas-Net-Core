@@ -2,7 +2,7 @@
 
 namespace PeliculasAPI.Entidades
 {
-	public class Genero
+	public class Genero: IId
 	{
 		public int Id { get; set; }
 
