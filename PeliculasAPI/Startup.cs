@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Utilities;
 using PeliculasAPI.Helpers;
 using PeliculasAPI.Servicios;
+using System.Text;
 
 namespace PeliculasAPI
 {
@@ -48,6 +52,24 @@ namespace PeliculasAPI
 
 			services.AddControllers()
 				.AddNewtonsoftJson();
+
+			services.AddIdentity<IdentityUser, IdentityRole>()
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders();
+
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer(options =>
+					options.TokenValidationParameters = new TokenValidationParameters
+					{
+						ValidateIssuer = false,
+						ValidateAudience = false,
+						ValidateLifetime = true,
+						ValidateIssuerSigningKey = true,
+						IssuerSigningKey = new SymmetricSecurityKey(
+							Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
+						ClockSkew = TimeSpan.Zero
+					}
+				);
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
