@@ -13,7 +13,10 @@ namespace PeliculasAPI.Helpers
 			CreateMap<GeneroCreacionDTO, Genero>();
 
 			// Mapeo de SalaDeCine
-			CreateMap<SalaDeCine, SalaDeCineDTO>().ReverseMap();
+			CreateMap<SalaDeCine, SalaDeCineDTO>()
+				.ForMember(x => x.Latitud, x => x.MapFrom(y => y.Ubicacion.Y))
+				.ForMember(x => x.Longitud, x => x.MapFrom(y => y.Ubicacion.X));
+			CreateMap<SalaDeCineDTO, SalaDeCine>();
 			CreateMap<SalaDeCineCreacionDTO, SalaDeCine>();
 
 			// Mapeo de Actor
