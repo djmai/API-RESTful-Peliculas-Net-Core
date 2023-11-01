@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using PeliculasAPI.DTOs;
@@ -10,6 +11,9 @@ namespace PeliculasAPI.Helpers
 	{
 		public AutoMapperProfiles(GeometryFactory geometryFactory)
 		{
+			// Mapeo de usuario
+			CreateMap<IdentityUser, UsuarioDTO>().ReverseMap();
+
 			// Mapeo de Genero
 			CreateMap<Genero, GeneroDTO>().ReverseMap();
 			CreateMap<GeneroCreacionDTO, Genero>();
