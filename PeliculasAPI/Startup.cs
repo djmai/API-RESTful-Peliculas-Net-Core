@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Utilities;
+using PeliculasAPI.Controllers;
 using PeliculasAPI.Helpers;
 using PeliculasAPI.Servicios;
 using System.Text;
@@ -43,6 +44,9 @@ namespace PeliculasAPI
 					config.AddProfile(new AutoMapperProfiles(geometryFactory));
 				}).CreateMapper()
 			);
+
+			// Registrando servicio PeliculaExisteAttribute
+			services.AddScoped<PeliculaExisteAttribute>();
 
 			// Configuración de conexión con la base de datos
 			services.AddDbContext<ApplicationDbContext>(
