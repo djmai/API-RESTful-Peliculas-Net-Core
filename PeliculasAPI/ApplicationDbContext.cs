@@ -188,5 +188,6 @@ namespace PeliculasAPI
 
 		public DbSet<PeliculasSalasDeCine> PeliculasSalasDeCine { get; set; }
 
+		public DbSet<Review> Reviews { get; set; }
 	}
 }
