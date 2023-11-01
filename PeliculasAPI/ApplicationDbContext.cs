@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using NetTopologySuite;
 using PeliculasAPI.Entidades;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace PeliculasAPI
 {
-	public class ApplicationDbContext : DbContext
+	public class ApplicationDbContext : IdentityDbContext
 	{
 		public ApplicationDbContext(DbContextOptions options) : base(options)
 		{
@@ -31,6 +33,46 @@ namespace PeliculasAPI
 
 		private void SeedData(ModelBuilder modelBuilder)
 		{
+			var rolAdminId = "b29e33de-5979-42b7-8cc8-8fb8ade5c851";
+			var usuarioAdminId = "e16539eb-47d7-4d00-beac-1ad1e3cbb84f";
+
+			var rolAdmin = new IdentityRole()
+			{
+				Id = rolAdminId,
+				Name = "Admin",
+				NormalizedName = "Admin",
+			};
+
+			var passwordHasher = new PasswordHasher<IdentityUser>();
+
+			var username = "admin@example.com";
+
+			var usuarioAdmin = new IdentityUser()
+			{
+				Id = usuarioAdminId,
+				UserName = username,
+				NormalizedUserName = username,
+				Email = username,
+				NormalizedEmail = username,
+				PasswordHash = passwordHasher.HashPassword(null, "Aa123456!")
+			};
+
+			//modelBuilder.Entity<IdentityUser>()
+			//	.HasData(usuarioAdmin);
+
+			//modelBuilder.Entity<IdentityRole>()
+			//	.HasData(rolAdmin);
+
+			//modelBuilder.Entity<IdentityUserClaim<string>>()
+			//	.HasData(new IdentityUserClaim<string>()
+			//	{
+			//		Id = 1,
+			//		ClaimType = ClaimTypes.Role,
+			//		UserId = usuarioAdmin.Id,
+			//		ClaimValue = "Admin"
+			//	});
+
+
 			var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
 
 			modelBuilder.Entity<SalaDeCine>()
